@@ -1,35 +1,37 @@
 function Stopwatch() {
-  let startTime, endTime, running, duration = 0;
+  let running, intervalID, duration = 0;
+
+  let incrementTime = function() {
+    duration += 1;
+  }
 
   this.start = function() {
     if (running) {
-      throw new Error('Stopwatch is already running');
+      throw new Error('Stopwatch is already running.');
     }
-    startTime = new Date();
-    running = true;    
+    intervalID = setInterval(incrementTime, 1000);
+    running = true;
   }
 
   this.stop = function() {
     if (!running) {
-      throw new Error('Stopwatch is already stopped');
+      throw new Error('Stopwatch is already stopped.');
     }
+    clearInterval(intervalID);
     running = false;
-    endTime = new Date();
-    duration = (endTime.getTime() - startTime.getTime()) / 1000;
   }
-
+  
   this.reset = function() {
     duration = 0;
-    startTime = null;
-    endTime = null;
+    clearInterval(intervalID);
     running = false;
   }
 
   Object.defineProperty(this, 'duration', {
-    get: function() { return duration; }
+    get: function() {
+      return duration;
+    }
   });
 }
-
-
 
 const sw = new Stopwatch();
