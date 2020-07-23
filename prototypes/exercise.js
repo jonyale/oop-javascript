@@ -1,4 +1,4 @@
-console.log('requisiteplay: needed for a particular purpose : essential, necessary');
+console.log('requisite: needed for a particular purpose : essential, necessary');
 
 // Move instance members start, stop, reset to the prototype
 
@@ -18,35 +18,79 @@ function Stopwatch() {
   // Object.defineProperty()
 
   Object.defineProperty(this, 'duration', {
-    get: function() { return duration; }
+    get: function() { return duration; },
+    // setter allow prototype method to update its value but has the significant
+    // downside of making the duration value unreliable
+    set: function(value) { duration = value; }
+  });
+
+  // expose these private variables so the prototype methods can access them
+  // this has the downside of polluting our object's interface
+  // this is an example of premature or unnecessary optimization
+  Object.defineProperty(this, 'startTime', {
+    get: function() { return startTime; }
+  });
+  Object.defineProperty(this, 'endTime', {
+    get: function() { return endTime; }
+  });
+  Object.defineProperty(this, 'running', {
+    get: function() { return running; }
   });
 }
 
+// Stopwatch.prototype.start = function() {
+//   if (this.running) 
+//     throw new Error('Stopwatch has already started.');
+  
+//   this.running = true; 
+
+//   this.startTime = new Date();
+// };
+
+// Stopwatch.prototype.stop = function() {
+//   if (!this.running) 
+//     throw new Error('Stopwatch is not started.');
+
+//   this.running = false; 
+    
+//   this.endTime = new Date();
+
+//   const seconds = (this.endTime.getTime() - this.startTime.getTime()) / 1000;
+//   this.duration += seconds; 
+// };
+
+// Stopwatch.prototype.reset = function() { 
+//   this.startTime = null;
+//   this.endTime = null;
+//   this.running = false; 
+//   this.duration = 0; 
+// };
+
 Stopwatch.prototype = {
   start() {
-    if (running) 
+    if (this.running) 
       throw new Error('Stopwatch has already started.');
 
-    running = true; 
+    this.running = true; 
 
-    startTime = new Date();
+    this.startTime = new Date();
   },
   stop() {
-    if (!running) 
+    if (!this.running) 
       throw new Error('Stopwatch is not started.');
 
-    running = false; 
+    this.running = false; 
       
-    endTime = new Date();
+    this.endTime = new Date();
 
-    const seconds = (endTime.getTime() - startTime.getTime()) / 1000;
-    duration += seconds; 
+    const seconds = (this.endTime.getTime() - this.startTime.getTime()) / 1000;
+    this.duration += seconds; 
   },
   reset() { 
-    startTime = null;
-    endTime = null;
-    running = false; 
-    duration = 0; 
+    this.startTime = null;
+    this.endTime = null;
+    this.running = false; 
+    this.duration = 0; 
   },
 }
 
