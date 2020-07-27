@@ -16,20 +16,27 @@ function HTMLElement() {
   }
 }
 
-function HTMLSelectElement(arr = []) {
+HTMLElement.prototype.focus = function() {
+  console.log('focused');
+}
+
+function HTMLSelectElement(arr = [], click) {
   this.items = arr;
+
   this.addItem = function(item) {
     arr.push(item);
   }
+
   this.removeItem = function(item) {
     const index = arr.findIndex(el => el === item);
     if (index > 0) arr.splice(index, 1);
   }
 }
 
-HTMLElement.prototype.focus = function() {
-  console.log('focused');
-}
+// Set the HTMLSelectElement's prototpye to an INSTANCE, NOT to the prototype, of HTMLElement
+HTMLSelectElement.prototype = new HTMLElement();
+// Best Practice: reset constructor after overwriting the prototype
+HTMLSelectElement.prototype.constructor = HTMLSelectElement;
 
 const e = new HTMLElement();
 const s = new HTMLSelectElement();
