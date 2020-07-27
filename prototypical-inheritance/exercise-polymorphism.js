@@ -16,7 +16,7 @@ HTMLElement.prototype.focus = function() {
   console.log('focused');
 }
 
-function HTMLSelectElement(arr = [], click) {
+function HTMLSelectElement(arr = []) {
   this.items = arr;
 
   this.addItem = function(item) {
@@ -31,11 +31,8 @@ function HTMLSelectElement(arr = [], click) {
   this.render = function() {
     return `
     <select>
-      <option>${arr[0]}</option>
-      <option>${arr[1]}</option>
-      <option>${arr[2]}</option>
-    </select>`
-    // ${arr.forEach((el, i) => `<option>arr[i]</option>`)} // broken attempt in ``
+      ${arr.map(item => `<option>${item}</option>`).join('')}
+    </select>`;
   }
 }
 
@@ -62,7 +59,7 @@ const s = new HTMLSelectElement();
 const img = new HTMLImageElement();
 
 const elements = [
-  new HTMLSelectElement([1, 2, 9]),
+  new HTMLSelectElement([1, 4, 9]),
   new HTMLImageElement('http://'),
 ];
 
