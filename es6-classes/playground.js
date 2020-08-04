@@ -1,18 +1,16 @@
+const _radius = Symbol();
+const _draw = Symbol();
+
 class Circle {
   constructor(radius) {
-    this.radius = radius;
+    this[_radius] = radius;
   }
 
-  // Instance method
-  draw() {
-    console.log('draw');
-  }
-
-  // Static method
-  static parse(str) {
-    JSON.parse(str);
+  [_draw]() {
+  
   }
 }
 
 const c = new Circle(1);
-
+const key = Object.getOwnPropertySymbols(c)[0];
+console.log(c[key]);
